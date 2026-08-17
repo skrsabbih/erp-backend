@@ -13,6 +13,18 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->all();
     }
 
+    public function paginate(int $perPage = 10, array $filters = [])
+    {
+        $query = $this->model->query()->with('roles');
+        // serch for the user filter
+        if(!empty($filters['search'])){
+            $query->where(function ($q) use ($filters){
+                $q->where('name', 'like', "%{$filters['search']}%")
+                ->orwhere('email', 'like', "%{$filters['search']}%");
+            });
+        }
+    }
+
     public function find(int $id)
     {
         return $this->model->find($id);

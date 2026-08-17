@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces;
 interface UserRepositoryInterface
 {
     public function all();
+    public function paginate(int $perPage = 10, array $filters = []);
     public function find(int $id);
     public function findByEmail(string $email);
     public function create(array $data);
