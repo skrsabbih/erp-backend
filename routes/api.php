@@ -1,34 +1,50 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
-
-
-// auth routes
-Route::prefix('auth')->group(function(){
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
-
-    Route::middleware('auth:sanctum')->group(function(){
-        Route::post('logout', [AuthController::class, 'logout']);
-        Route::get('me', [AuthController::class, 'me']);
-    });
+// public auth routes
+Route::prefix('auth')->controller(AuthController::class)->group(function(){
+    Route::post('register', 'register');
+    Route::post('login', 'login');
 });
 
-// user management routes
-Route::prefix('users')->middleware('auth:sanctum')->group(function(){
-    Route::get('/', [UserController::class, 'index'])->middleware('permission:user.view');
-    Route::post('/', [UserController::class, 'store'])->middleware('permission:user.create');
-    Route::get('/{id}', [UserController::class, 'show'])->middleware('permission:user.view');
-    Route::put('/{id}', [UserController::class, 'update'])->middleware('permission:user.update');
-    Route::delete('/{id}', [UserController::class, 'delete'])->middleware('permission:user.delete');
-    Route::put('/{id}/active', [UserController::class, 'active'])->middleware('permission:user.activate');
-    Route::put('/{id}/deactive', [UserController::class, 'deactive'])->middleware('permission:user.deactivate');
+// all protected routes
+Route::middleware('auth:sanctum')->group(function(){
+    // private auth routes
+    Route::prefix('auth')->controller(AuthController::class)->group(function(){
+        Route::post('logout', 'logout');
+        Route::get('me', 'me');
+    });
+
+    // user management routes
+    Route::prefix('users')->controller(UserController::class)->group(function(){
+        Route::get('/', 'index')->middleware('permission:user.view');
+        Route::post('/', 'store')->middleware('permission:user.create');
+        Route::get('/{id}', 'show')->middleware('permission:user.view');
+        Route::put('/{id}', 'update')->middleware('permission:user.update');
+        Route::delete('/{id}', 'delete')->middleware('permission:user.delete');
+        Route::put('/{id}/active', 'active')->middleware('permission:user.activate');
+        Route::put('/{id}/deactive', 'deactive')->middleware('permission:user.deactivate');
+    });
+
+    // role management routes
+    Route::prefix('roles')->controller(RoleController::class)->group(function(){
+        Route::get('/', 'index')->middleware('permission:role.view');
+        Route::post('/', 'store')->middleware('permission:role.create');
+        Route::get('/{id}', 'show')->middleware('permission:role.view');
+        Route::put('/{id}', 'update')->middleware('permission:role.update');
+        Route::delete('/{id}', 'destroy')->middleware('permission:role.delete');
+        Route::put('/{id}/sync-permissions', 'syncPermissions')->middleware('permission:role.update');
+    });
+
+    // permission management routes
+    Route::prefix('permissions')->controller(PermissionController::class)->group(function(){
+        Route::get('/', 'index')->middleware('permission:permission.view');
+    });
 });
 

@@ -23,7 +23,7 @@ class UserService
     // create a new user
     public function createUser(array $data)
     {
-        $role = $data['role'] ?? [];
+        $role = $data['role'] ?? null;
         unset($data['role']);
         $data['status'] = UserStatus::ACTIVE;
         $user = $this->userRepository->create($data);
@@ -38,7 +38,7 @@ class UserService
     // update user by id
     public function updateUser(int $id, array $data)
     {
-        $role = $data['role'] ?? [];
+        $role = $data['role'] ?? null;
         unset($data['role']);
         // if password is not provided, do not update password
         if(empty($data['password'])){

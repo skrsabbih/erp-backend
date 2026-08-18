@@ -20,6 +20,7 @@ class UserController extends Controller
     {
         $users = $this->userService->getUsers($request->integer('per_page', 10), $request->all());
 
+        // return success response
         return response()->json([
             'message' => 'User List Successfully',
             'data'    => UserResource::collection(($users)),
