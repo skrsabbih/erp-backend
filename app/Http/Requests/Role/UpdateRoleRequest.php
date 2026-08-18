@@ -26,9 +26,22 @@ class UpdateRoleRequest extends FormRequest
          $roleId = $this->route('id');
         return [
             // validation rules for update role
-            'name' => 'required, string, max:255',Rule::unique('roles', 'name')->ignore($roleId),
-            'permissions' => 'nullable, array',
-            'permissions.*' => 'exists:permissions,name',
+            'name' => ['sometimes', 'string', 'max:255', Rule::unique('roles', 'name')->ignore($roleId),],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['exists:permissions,name'],
+        ];
+    }
+
+    // custom message for validation errors
+    public function messages(): array
+    {
+        return [
+            'name.sometimes' => 'Name is sometimes required',
+            'name.string' => 'Name must be a string',
+            'name.max' => 'Name must be less than 255 characters',
+            'name.unique' => 'Name must be unique',
+            'permissions.array' => 'Permissions must be an array',
+            'permissions.*.exists' => 'Permission does not exist',
         ];
     }
 }

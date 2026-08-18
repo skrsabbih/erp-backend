@@ -28,6 +28,7 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone' => ['required', 'string', 'phone:E164', 'unique:users,phone'],
+            'role' => ['required', 'string', 'exists:roles,name'],
         ];
     }
 
@@ -45,6 +46,8 @@ class StoreUserRequest extends FormRequest
             'phone.required' => 'Phone is required',
             'phone.phone' => 'Phone must be a valid phone number',
             'phone.unique' => 'Phone already exists',
+            'role.required' => 'Role is required',
+            'role.exists' => 'Role does not exist',
         ];
     }
 }

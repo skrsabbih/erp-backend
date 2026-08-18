@@ -97,15 +97,15 @@ class RoleController extends Controller
     }
 
     // handle sync permissions request
-    public function syncPermissions(StoreRoleRequest $request, $id): JsonResponse
+    public function syncPermissions(UpdateRoleRequest $request, $id): JsonResponse
     {
         $validation = $request->validated();
-        $role = $this->roleService->syncRoleWithPermissions($validation['id'], $validation['permissions']);
+        $role = $this->roleService->syncRoleWithPermissions($id, $validation['permissions']);
 
         // return success response
         return response()->json([
             'message' => 'Role Sync Permission Successfully',
             'data'    => new RoleResource($role),
-        ], 201);
+        ], 200);
     }
 }

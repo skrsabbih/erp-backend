@@ -10,7 +10,7 @@ class RoleRepository implements RoleRepositoryInterface
 
     public function all()
     {
-        return $this->model->with('permissions')->all();
+        return $this->model->with('permissions')->get();
     }
 
     public function find(int $id)

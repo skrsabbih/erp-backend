@@ -24,9 +24,9 @@ class StoreRoleRequest extends FormRequest
     {
         return [
             // validation rules for store role
-            'name' => 'required, string, max:255, unique:roles,name',
-            'permissions' => 'nullable, array',
-            'permissions.*' => 'exists:permissions,name',
+            'name' => ['required', 'string', 'max:255', 'unique:roles,name',],
+            'permissions' => ['nullable', 'array'],
+            'permissions.*' => ['exists:permissions,name'],
 
         ];
     }
