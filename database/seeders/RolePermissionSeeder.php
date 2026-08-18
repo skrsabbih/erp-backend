@@ -17,7 +17,7 @@ class RolePermissionSeeder extends Seeder
         // permission seeder
         $permissions = [
             // user permissions
-            'user.view', 'user.create', 'user.update', 'user.delete',
+            'user.view', 'user.create', 'user.update', 'user.delete', 'user.activate', 'user.deactivate',
             // role permissions
             'role.view', 'role.create', 'role.update', 'role.delete',
             // permission permissions
@@ -47,7 +47,7 @@ class RolePermissionSeeder extends Seeder
         // assign all permissions to super-admin role and admin role as well (sync perm issions)
         $superAdmin->syncPermissions(Permission::all());
         $admin->syncPermissions([
-            'user.view', 'user.create', 'user.update',
+            'user.view', 'user.create', 'user.update','user.activate','user.deactivate',
             'role.view',
             'permission.view',
         ]);

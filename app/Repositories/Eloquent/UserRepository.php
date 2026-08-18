@@ -23,11 +23,18 @@ class UserRepository implements UserRepositoryInterface
                 ->orwhere('email', 'like', "%{$filters['search']}%");
             });
         }
+        // filter by user status
+        if(isset($filters['status'])){
+            $query->where('status', $filters['status']);
+        }
+
+        // then return the paginated resutl
+        return $query->latest()->paginate($perPage);
     }
 
     public function find(int $id)
     {
-        return $this->model->find($id);
+        return $this->model->with('roles')->find($id);
     }
 
     public function findByEmail(string $email)
