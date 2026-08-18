@@ -56,5 +56,10 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->model->where('id', $id)->delete();
     }
+
+    public function syncRoles(int $id, array $roles)
+    {
+        return $this->model->find($id)->syncRoles($roles);
+    }
 }
 

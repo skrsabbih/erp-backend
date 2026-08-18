@@ -23,13 +23,23 @@ class UserService
     // create a new user
     public function createUser(array $data)
     {
+        $role = $data['role'] ?? [];
+        unset($data['role']);
         $data['status'] = UserStatus::ACTIVE;
-        return $this->userRepository->create($data);
+        $user = $this->userRepository->create($data);
+
+        if($role){
+            $user->assignRole($role);
+        }
+
+        return $user->load('roles');
     }
 
     // update user by id
     public function updateUser(int $id, array $data)
     {
+        $role = $data['role'] ?? [];
+        unset($data['role']);
         // if password is not provided, do not update password
         if(empty($data['password'])){
             unset($data['password']);
@@ -38,7 +48,13 @@ class UserService
         $this->userRepository->update($id, $data);
 
         // return updated user
-        return $this->userRepository->find($id);
+        $user = $this->userRepository->find($id);
+
+        if($role){
+            $user->syncRoles([$role]);
+        }
+
+        return $user->load('roles');
     }
 
     // delete user by id

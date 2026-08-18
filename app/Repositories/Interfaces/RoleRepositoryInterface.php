@@ -1,15 +1,12 @@
 <?php
 namespace App\Repositories\Interfaces;
 
-interface UserRepositoryInterface
+interface RoleRepositoryInterface
 {
     public function all();
-    public function paginate(int $perPage = 10, array $filters = []);
     public function find(int $id);
-    public function findByEmail(string $email);
     public function create(array $data);
     public function update(int $id, array $data);
     public function delete(int $id);
-    public function syncRoles(int $id, array $roles);
-
+    public function syncPermissions(int $id, array $permissions);
 }
